@@ -12,7 +12,6 @@ class Utilisatuer(AbstractUser):
     ],default='c')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now = True)
-    gerant = models.OneToOneField(Utilisatuer,on_delete=models.CASCADE,related_name='entreprise')
 
 
 class Enterprise(models.Model):
@@ -26,5 +25,6 @@ class Enterprise(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+    gerant = models.OneToOneField(Utilisatuer,on_delete=models.CASCADE,related_name='entreprise')
 
 
