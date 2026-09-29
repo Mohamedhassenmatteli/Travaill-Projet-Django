@@ -8,5 +8,5 @@ class vehicules(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     disponible = models.BooleanField(default=True)
-    type_vehicule = models.CharField(max_length=20,choices=[('camion','Camion'),('remorque','Remorque'),('fourgon','Fourgon')],default='camion')
+    type_vehicule = models.CharField(max_length=20,choices=[])
     
