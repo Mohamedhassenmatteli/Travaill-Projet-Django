@@ -1,9 +1,9 @@
 from django.db import models
-
+from django.core.validators import MinValueValidator
 # Create your models here.
 class offre(models.Model):
-    prix = models.FloatField()
-    delais_jour = models.IntegerField(blank=False,null=False)
+    prix = models.FloatField(validators=[MinValueValidator(1,"Le prix ne peut pas etre negative")])
+    delais_jour = models.IntegerField(blank=False,null=False,validators=[MinValueValidator(1,"Le delais ne peut pas etre negative")])
     status = models.CharField(max_length=20,choices=[
         ('p','proposee'), 
         ('a','acceptee'),
