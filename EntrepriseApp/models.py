@@ -1,3 +1,5 @@
+from time import timezone
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxLengthValidator, MinLengthValidator , RegexValidator
@@ -28,6 +30,25 @@ class Utilisatuer(AbstractUser):
     ],default='c')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now = True)
+    @classmethod
+    def generate_user_id(cls):
+        year = timezone.now().strftime("%y")
+        prefix = f"{year}USER"
+        last = (cls.objects.filter(user_id__startswith=prefix)
+                .order_by("-user_id")
+                .first())
+        compteur = int(last.user_id[-2:]) + 1 if last else 1
+        if compteur > 99:
+            raise ValueError("Limite atteinte")
+        return f"{prefix}{compteur:02d}"
+    def save(self,*args,**kwargs):
+        if not self.user_id:
+            self.user_id = self.generate_user_id()
+        self.full_clean()  # fonction pour valiser tous les validateurs
+        super().save(*args,**kwargs)
+
+    
+
 
 
 class Enterprise(models.Model):
@@ -45,5 +66,4 @@ class Enterprise(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
     gerant = models.OneToOneField(Utilisatuer,on_delete=models.CASCADE,related_name='entreprise')
-
 

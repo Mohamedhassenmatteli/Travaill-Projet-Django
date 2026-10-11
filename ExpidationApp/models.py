@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import     MinValueValidator
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 # Create your models here.
 class expedition(models.Model):
     entreprise = models.ForeignKey('EntrepriseApp.Enterprise',on_delete=models.CASCADE,related_name='expeditions')
@@ -21,6 +22,12 @@ class expedition(models.Model):
     ],default='publiee')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    def clean(self):
+        super().clean() #S'il y a une validataion de deux valeurs ou plus on doit appeler la methode clean de la classe parent
+        if self.entreprise_id and self.entreprise.type_entreprise != 'chargeur':
+            raise ValidationError(({
+                'entreprise : une expedition ne peut etre cree que par un chargeur'
+            }))
     @classmethod
     def _generate_reference(cls):
         annee = timezone.now().strftime("%y")
