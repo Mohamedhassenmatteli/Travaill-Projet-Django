@@ -1,9 +1,9 @@
-from time import timezone
-
-from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MaxLengthValidator, MinLengthValidator , RegexValidator
+from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+from django.core.validators import MinLengthValidator ,MaxLengthValidator
+from django.db import models
+from django.utils import timezone
 # Create your models here.
 
 
@@ -20,7 +20,7 @@ matricule_fiscale = RegexValidator(
 )
     
 class Utilisatuer(AbstractUser):
-    user_id = models.CharField(primary_key=True,max_length=8)
+    user_id = models.CharField(primary_key=True,max_length=8,editable=False)
     email = models.EmailField(unique=True,validators=[validate_email])
     telephone = models.CharField(max_length=15,blank=True,null=True)
     role = models.CharField(max_length=20,choices=[
@@ -31,19 +31,27 @@ class Utilisatuer(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now = True)
     @classmethod
-    def generate_user_id(cls):
-        year = timezone.now().strftime("%y")
-        prefix = f"{year}USER"
-        last = (cls.objects.filter(user_id__startswith=prefix)
-                .order_by("-user_id")
-                .first())
-        compteur = int(last.user_id[-2:]) + 1 if last else 1
+    def _generate_user_id(cls):
+        annee = timezone.now().strftime('%y')
+        prefixe = f"{annee}user"
+ 
+        dernier = (
+            cls.objects
+            .filter(user_id__startswith=prefixe)
+            .order_by('-user_id')
+            .first()
+        )
+        compteur = int(dernier.user_id[-2:]) + 1 if dernier else 0
+ 
         if compteur > 99:
-            raise ValueError("Limite atteinte")
-        return f"{prefix}{compteur:02d}"
+            raise ValueError(
+                f"Limite de 100 utilisateurs atteinte pour l'année 20{annee}."
+            )
+ 
+        return f"{prefixe}{compteur:02d}"
     def save(self,*args,**kwargs):
         if not self.user_id:
-            self.user_id = self.generate_user_id()
+            self.user_id = self._generate_user_id()
         self.full_clean()  # fonction pour valiser tous les validateurs
         super().save(*args,**kwargs)
 

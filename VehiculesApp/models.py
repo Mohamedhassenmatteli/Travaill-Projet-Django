@@ -17,3 +17,43 @@ class vehicules(models.Model):
             raise ValidationError(({
                 'entreprise : un vehicule ne peut etre cree que par un transporteur'
             }))
+
+        if self.vehicule_id and self.statut == 'proposee':
+            if not self.vehicule.disponible:
+                raise ValidationError({
+                    'vehicule': "Ce véhicule n'est pas disponible."
+                })
+
+        if self.vehicule_id and self.expedition_id:
+            capacites = {
+                'camionnette': 1.5,
+                'fourgon': 3.5,
+                'camion_porteur': 19,
+                'semi_remorque': 26,
+            }
+
+            type_vehicule = self.vehicule.type_vehicule
+            poids = self.expedition.poids
+
+            capacite_max = capacites.get(type_vehicule)
+
+            if capacite_max is None:
+                raise ValidationError({
+                    'vehicule': "Le type de véhicule est inconnu."
+                })
+
+            if poids is None or poids <= 0:
+                raise ValidationError({
+                    'expedition': "Le poids doit être strictement positif."
+                })
+
+            if poids > capacite_max:
+                raise ValidationError({
+                    'vehicule': (
+                        f"Le véhicule de type '{type_vehicule}' "
+                        f"ne peut pas transporter {poids} tonnes. "
+                        f"Capacité maximale indicative : "
+                        f"{capacite_max} tonnes."
+                    )
+                })
+            
