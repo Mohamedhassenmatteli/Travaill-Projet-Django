@@ -33,8 +33,8 @@ class offre(models.Model):
             raise ValidationError(({
                 " Une expédition ne peut recevoir de nouvelles offres que si son statut est publiee. "
             }))
-        if self.transporteur and self.expedition and self.status == "proposee" :
-            expedition_exisite = offre.objects.filter(transporteur=self.transporteur, expedition=self.expedition,status="proposee")
+        if self.transporteur_id and self.expedition and self.status == "proposee" :
+            expedition_exisite = offre.objects.filter(entreprise_id=self.transporteur_id, expedition_id=self.expedition_id,status="proposee")
             if self.pk:
                 offres_existantes = offres_existantes.exclude(
                     pk=self.pk
@@ -54,6 +54,8 @@ class offre(models.Model):
                         "pour une nouvelle offre."
                     )
                 })
+
+        
     def save(self, *args, **kwargs):
         with transaction.atomic():
             ancienne_offre = None
@@ -87,3 +89,5 @@ class offre(models.Model):
                 ).exclude(
                     pk=self.pk
                 ).update(statut='refusee')
+
+    
