@@ -6,6 +6,8 @@ from .models import offre
 from django.http import HttpResponse 
 # Register your models here.
 @admin.register(offre)
+class admin_offre(admin.ModelAdmin):
+    search_fields = ('expedition', 'transporteur', 'vehicule') 
 class offre_admin(admin.ModelAdmin):
     list_display = ('prix','delais_jour','status','date_proposition','expedition','transporteur','vehicule')
     autocomplete_fields = ('expedition', 'transporteur', 'vehicule') 

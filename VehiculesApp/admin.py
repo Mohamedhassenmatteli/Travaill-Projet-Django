@@ -5,6 +5,7 @@ from .models import vehicules
 class vehicule_admin(admin.ModelAdmin):
     list_display = ('immatriculation','capacite_kg','created_at','disponible')
     readonly_fields = ('created_at','updated_at')
+    search_fields = ('immatriculation', 'type_vehicule','capacite_kg')
     fieldsets = (
 
         ('Identification', {

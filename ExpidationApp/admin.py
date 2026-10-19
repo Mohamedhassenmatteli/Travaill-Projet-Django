@@ -12,21 +12,22 @@ class EnRetardFilter(admin.SimpleListFilter):
  
     def queryset(self, request, queryset): 
         if self.value() == 'oui': 
-            return queryset.filter(statut='publiee', 
+            return queryset.filter(status='publiee', 
 date_souhaitee__lt=timezone.now().date()) 
         if self.value() == 'non': 
-            return queryset.exclude(statut='publiee', 
+            return queryset.exclude(status='publiee', 
 date_souhaitee__lt=timezone.now().date()) 
         return queryset 
 
-@admin.register(admin.ModelAdmin)
+@admin.register(expedition)
 class expedition_admin(admin.ModelAdmin):
-    list_filter = ('statut', 'ville_depart', EnRetardFilter)
-    list_display = ('expedition_id','ville_depart','ville_arrivee','status')
+    list_filter = ('status', 'ville_depart', EnRetardFilter)
+    list_display = ('ville_depart','ville_arrivee','status')
     readonly_fields = ('created_at','updated_at')
+    search_fields = ('ville_depart', 'ville_arrivee')
     fieldsets = (
         ('Détails de l\'expédition', {
-            'fields': ('expedition_id', 'ville_depart', 'ville_arrivee', 'status')
+            'fields': ('ville_depart', 'ville_arrivee', 'status')
         }),
         ('Horodatage', {
             'fields': ('created_at', 'updated_at'),
