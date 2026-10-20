@@ -11,12 +11,13 @@ class EnRetardFilter(admin.SimpleListFilter):
         return [('oui', 'Oui'), ('non', 'Non')] 
  
     def queryset(self, request, queryset): 
+        aujourd_hui = timezone.now().date()
         if self.value() == 'oui': 
             return queryset.filter(status='publiee', 
-date_souhaitee__lt=timezone.now().date()) 
+date_souhaitee__lt = aujourd_hui)
         if self.value() == 'non': 
             return queryset.exclude(status='publiee', 
-date_souhaitee__lt=timezone.now().date()) 
+date_souhaitee__lt=aujourd_hui) 
         return queryset 
 
 @admin.register(expedition)
@@ -27,7 +28,7 @@ class expedition_admin(admin.ModelAdmin):
     search_fields = ('ville_depart', 'ville_arrivee')
     fieldsets = (
         ('Détails de l\'expédition', {
-            'fields': ('ville_depart', 'ville_arrivee', 'status')
+            'fields': ('ville_depart', 'ville_arrivee', 'status','date_souhaitee','entreprise','description','poids_kg')
         }),
         ('Horodatage', {
             'fields': ('created_at', 'updated_at'),

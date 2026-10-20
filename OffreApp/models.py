@@ -21,39 +21,54 @@ class offre(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def clean(self):
-        if self.transporteur and self.transporteur.type_entreprise == 'transporteur':
-            raise ValidationError(({
-                'transporteur : une offre ne peut etre faite que par un transporteur'
-            }))
-        if self.vehicule and self.vehicule.entreprise_id != self.transporteur:
-            raise ValidationError(({
-                " Le véhicule associé à une offre doit appartenir à la même entreprise que le transporteur de l'offre."
-            }))
-        if self.expedition and self.expedition.status != "p" :
-            raise ValidationError(({
-                " Une expédition ne peut recevoir de nouvelles offres que si son statut est publiee. "
-            }))
-        if self.transporteur_id and self.expedition and self.status == "proposee" :
-            expedition_exisite = offre.objects.filter(entreprise_id=self.transporteur_id, expedition_id=self.expedition_id,status="proposee")
+        super().clean()
+        if self.transporteur_id and self.transporteur.type_entreprise != 't':
+            raise ValidationError({
+                'transporteur': (
+                    'Une offre ne peut être faite que par un transporteur.'
+                )
+            })
+        if (
+            self.vehicule_id
+            and self.transporteur_id
+            and self.vehicule.entreprise_id != self.transporteur_id
+        ):
+            raise ValidationError({
+                'vehicule': (
+                    "Le véhicule associé à une offre doit appartenir à la "
+                    "même entreprise que le transporteur de l'offre."
+                )
+            })
+        if self.expedition_id and self.expedition.status != "p":
+            raise ValidationError({
+                'expedition': (
+                    "Une expédition ne peut recevoir de nouvelles offres "
+                    "que si son statut est publiée."
+                )
+            })
+        if self.transporteur_id and self.expedition_id and self.status == "p":
+            offres_existantes = offre.objects.filter(
+                transporteur_id=self.transporteur_id,
+                expedition_id=self.expedition_id,
+                status="p",
+            )
             if self.pk:
                 offres_existantes = offres_existantes.exclude(
                     pk=self.pk
                 )
-        if offres_existantes.exists():
-            raise ValidationError({
-                'entreprise': (
-                    "Cette entreprise possède déjà une offre "
-                    "proposée pour cette expédition."
-                )
-            })
-        if self.vehicule_id and self.statut == 'proposee':
-            if not self.vehicule.disponible:
+            if offres_existantes.exists():
                 raise ValidationError({
-                    'vehicule': (
-                        "Ce véhicule n'est pas disponible "
-                        "pour une nouvelle offre."
+                    'transporteur': (
+                        "Cette entreprise possède déjà une offre proposée "
+                        "pour cette expédition."
                     )
                 })
+        if self.vehicule_id and self.status == 'p' and not self.vehicule.disponible:
+            raise ValidationError({
+                'vehicule': (
+                    "Ce véhicule n'est pas disponible pour une nouvelle offre."
+                )
+            })
 
         
     def save(self, *args, **kwargs):
@@ -69,25 +84,26 @@ class offre(models.Model):
                 )
 
             devient_acceptee = (
-                self.statut == 'acceptee'
+                self.status == 'a'
                 and (
                     ancienne_offre is None
-                    or ancienne_offre.statut != 'acceptee'
+                    or ancienne_offre.status != 'a'
                 )
             )
 
+            self.full_clean()
             super().save(*args, **kwargs)
 
             if devient_acceptee:
                 expedition.objects.filter(
                     pk=self.expedition_id
-                ).update(statut='attribuee')
+                ).update(status='a')
 
                 offre.objects.filter(
                     expedition_id=self.expedition_id,
-                    statut='proposee'
+                    status='p'
                 ).exclude(
                     pk=self.pk
-                ).update(statut='refusee')
+                ).update(status='r')
 
     

@@ -11,14 +11,27 @@ class vehicules(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     disponible = models.BooleanField(default=True)
-    type_vehicule = models.CharField(max_length=20,choices=[])
+    type_vehicule = models.CharField(max_length=20,choices=[
+        ('camionnette','Camionnette'),
+        ('fourgon','Fourgon'),
+        ('camion_porteur','Camion porteur'),
+        ('semi_remorque','Semi-remorque')
+    ])
     def clean(self):
-        if self.entreprise_id and self.entreprise.type_entreprise != 'transporteur':
+        super().clean()
+        if self.entreprise_id and self.entreprise.type_entreprise != 't':
+            raise ValidationError({
+                'entreprise': (
+                    'Un véhicule ne peut être créé que par un transporteur.'
+
+                )
+            })
+        if self.entreprise_id and self.entreprise.type_entreprise != 't':
             raise ValidationError(({
                 'entreprise : un vehicule ne peut etre cree que par un transporteur'
             }))
 
-        if self.vehicule_id and self.statut == 'proposee':
+        if self.vehicule_id and self.statut == 'p':
             if not self.vehicule.disponible:
                 raise ValidationError({
                     'vehicule': "Ce véhicule n'est pas disponible."
@@ -56,4 +69,9 @@ class vehicules(models.Model):
                         f"{capacite_max} tonnes."
                     )
                 })
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # Valider les champs avant de sauvegarder
+        super().save(*args, **kwargs)
+
             
