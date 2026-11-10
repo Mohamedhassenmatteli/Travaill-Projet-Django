@@ -1,22 +1,32 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail de l'expédition</title>
+    <link rel="stylesheet" href="{% static 'css/expedition.css' %}">
+    <title>{{ detail.reference }} | TransLog</title>
 </head>
 <body>
-    <h1>Détail de l'expédition</h1>
-    <p>Référence : {{ detail.reference }}</p>
-    <p>Entreprise : {{ detail.entreprise }}</p>
-    <p>Ville de départ : {{ detail.ville_depart }}</p>
-    <p>Ville d'arrivée : {{ detail.ville_arrivee }}</p>
-    <p>Poids : {{ detail.poids_kg }} kg</p>
-    <p>Date souhaitée : {{ detail.date_souhaitee }}</p>
-    <p>Description : {{ detail.description }}</p>
-    <p>Statut : {{ detail.get_status_display }}</p>
-    <p>Date de création : {{ detail.created_at }}</p>
-    <p>Date de dernière modification : {{ detail.updated_at }}</p>
-    <a href = "{% url 'Expidation:list' %}">Retour à la liste</a>
+    <header class="topbar"><div class="topbar-inner"><a class="brand" href="{% url 'Expidation:listview' %}">TransLog</a><nav><a href="{% url 'Expidation:listview' %}">Expéditions</a></nav></div></header>
+    <main class="container">
+        <div class="page-heading">
+            <div><h1>Détail de l'expédition</h1><p class="subtitle">Référence {{ detail.reference }}</p></div>
+            <a class="button button-secondary" href="{% url 'Expidation:listview' %}">← Retour à la liste</a>
+        </div>
+        <section class="card detail-card">
+            <div class="detail-grid">
+                <div class="detail-item"><strong>Entreprise</strong>{{ detail.entreprise }}</div>
+                <div class="detail-item"><strong>Statut</strong><span class="status">{{ detail.get_status_display }}</span></div>
+                <div class="detail-item"><strong>Ville de départ</strong>{{ detail.ville_depart }}</div>
+                <div class="detail-item"><strong>Ville d'arrivée</strong>{{ detail.ville_arrivee }}</div>
+                <div class="detail-item"><strong>Poids</strong>{{ detail.poids_kg }} kg</div>
+                <div class="detail-item"><strong>Date souhaitée</strong>{{ detail.date_souhaitee|date:"d/m/Y à H:i" }}</div>
+                <div class="detail-item"><strong>Créée le</strong>{{ detail.created_at|date:"d/m/Y à H:i" }}</div>
+                <div class="detail-item"><strong>Modifiée le</strong>{{ detail.updated_at|date:"d/m/Y à H:i" }}</div>
+            </div>
+            <div class="description"><strong>Description</strong><p>{{ detail.description }}</p></div>
+        </section>
+    </main>
 </body>
 </html>

@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/expedition.css' %}">
+    <title>{% if object %}Modifier{% else %}Nouvelle{% endif %} expédition | TransLog</title>
+</head>
+<body>
+    <header class="topbar"><div class="topbar-inner"><a class="brand" href="{% url 'Expidation:listview' %}">TransLog</a><nav><a href="{% url 'Expidation:listview' %}">Expéditions</a></nav></div></header>
+    <main class="container">
+        <section class="card form-card">
+            <h1>{% if object %}Modifier l'expédition{% else %}Créer une expédition{% endif %}</h1>
+            <p class="subtitle">Renseignez les informations nécessaires au transport.</p>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-actions">
+                    <button type="submit">{% if object %}Enregistrer{% else %}Créer l'expédition{% endif %}</button>
+                    <a class="button button-secondary" href="{% url 'Expidation:listview' %}">Annuler</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

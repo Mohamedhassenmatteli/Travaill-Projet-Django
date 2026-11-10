@@ -1,22 +1,58 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/expedition.css' %}">
+    <title>Expéditions | TransLog</title>
 </head>
 <body>
-    <h1>expedition list</h1>
-    <ul>
-        {% for expedition in list %}
-            <li>
-                    <a href="{% url 'Expidation:detail' expedition.reference %}">{{ expedition.reference }}</a>
-                - {{ expedition.entreprise }}
-                <a href="{% url 'Expidation:delete' expedition.reference %}">Supprimer</a>
-            </li>
-            {% empty %}
-                No expeditions available
-        {% endfor %}
-    </ul>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="{% url 'Expidation:listview' %}">TransLog</a>
+            <nav><a href="{% url 'Expidation:listview' %}">Expéditions</a></nav>
+        </div>
+    </header>
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <h1>Gestion des expéditions</h1>
+                <p class="subtitle">Suivez et organisez vos livraisons en un seul endroit.</p>
+            </div>
+            <a class="button button-primary" href="{% url 'Expidation:add' %}">+ Nouvelle expédition</a>
+        </div>
+        {% if list %}
+            <div class="card table-wrap">
+                <table class="expedition-table">
+                    <thead>
+                        <tr>
+                            <th>Référence</th><th>Itinéraire</th><th>Poids</th><th>Statut</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for expedition in list %}
+                            <tr>
+                                <td><a class="reference" href="{% url 'Expidation:detail' expedition.pk %}">{{ expedition.reference }}</a></td>
+                                <td>{{ expedition.ville_depart }} → {{ expedition.ville_arrivee }}</td>
+                                <td>{{ expedition.poids_kg }} kg</td>
+                                <td><span class="status">{{ expedition.get_status_display }}</span></td>
+                                <td class="actions">
+                                    <a class="button button-secondary" href="{% url 'Expidation:update' expedition.pk %}">Modifier</a>
+                                    <a class="button button-danger" href="{% url 'Expidation:delete' expedition.pk %}">Supprimer</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h2>Aucune expédition</h2>
+                <p>Créez votre première expédition pour commencer.</p>
+                <a class="button button-primary" href="{% url 'Expidation:add' %}">Créer une expédition</a>
+            </div>
+        {% endif %}
+    </main>
 </body>
 </html>

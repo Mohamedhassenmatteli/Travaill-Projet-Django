@@ -1,12 +1,24 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/expedition.css' %}">
+    <title>Supprimer l'expédition | TransLog</title>
 </head>
 <body>
-    <h2>L'expedition {{ choix.reference }} va être supprimée.</h2>
-    <a href = "{% url 'Expidation:list' %}">Retour à la liste</a>
+    <header class="topbar"><div class="topbar-inner"><a class="brand" href="{% url 'Expidation:listview' %}">TransLog</a><nav><a href="{% url 'Expidation:listview' %}">Expéditions</a></nav></div></header>
+    <main class="container">
+        <section class="card danger-card">
+            <h1>Supprimer l'expédition ?</h1>
+            <p>Cette action supprimera définitivement l'expédition <strong>{{ object.reference }}</strong>. Voulez-vous continuer ?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button class="button-danger" type="submit">Supprimer définitivement</button>
+                <a class="button button-secondary" href="{% url 'Expidation:listview' %}">Annuler</a>
+            </form>
+        </section>
+    </main>
 </body>
 </html>

@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 # Create your models here.
 class expedition(models.Model):
     entreprise = models.ForeignKey('EntrepriseApp.Enterprise',on_delete=models.CASCADE,related_name='expeditions')
-    reference = models.CharField(max_length=20, unique=True, editable=False)
+    reference = models.CharField(primary_key=True,max_length=20, unique=True, editable=False)
     ville_depart = models.CharField(max_length=100)
     ville_arrivee = models.CharField(max_length=100)
     poids_kg = models.FloatField(validators=[

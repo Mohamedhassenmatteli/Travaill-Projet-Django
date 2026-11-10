@@ -69,41 +69,16 @@ class offre(models.Model):
                     "Ce véhicule n'est pas disponible pour une nouvelle offre."
                 )
             })
+        if self.expedition_id and self.status =='a':
+            self.expedition.status = 'a'
+            offre.objects.filter(expedition=self.expedition_id , status='p').update(status='r')
+            self.expedition.save()
 
         
     def save(self, *args, **kwargs):
-        with transaction.atomic():
-            ancienne_offre = None
-
-            if self.pk:
-                ancienne_offre = (
-                    offre.objects
-                    .select_for_update()
-                    .filter(pk=self.pk)
-                    .first()
-                )
-
-            devient_acceptee = (
-                self.status == 'a'
-                and (
-                    ancienne_offre is None
-                    or ancienne_offre.status != 'a'
-                )
-            )
 
             self.full_clean()
             super().save(*args, **kwargs)
 
-            if devient_acceptee:
-                expedition.objects.filter(
-                    pk=self.expedition_id
-                ).update(status='a')
-
-                offre.objects.filter(
-                    expedition_id=self.expedition_id,
-                    status='p'
-                ).exclude(
-                    pk=self.pk
-                ).update(status='r')
 
     
