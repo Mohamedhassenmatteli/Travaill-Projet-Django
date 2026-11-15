@@ -28,7 +28,7 @@ class offre_admin(admin.ModelAdmin):
     list_filter = ('status', 'date_proposition', 'prix',FilterBYPrice)
     readonly_fields = ('date_proposition', 'created_at', 'updated_at') 
     fieldsets = ( 
-        ('Détails de l\'offre', {'fields': ('expedition', 'transporteur', 'vehicule')}), 
+        ('Détails de l\'offre', {'fields': ('expedition', 'transporteur','vehicule','delais_jour','status')}), 
         ('prix', {'fields': ('prix',)}), 
         ('Suivi', {'fields': ('date_proposition', 'created_at', 
         'updated_at')}), 

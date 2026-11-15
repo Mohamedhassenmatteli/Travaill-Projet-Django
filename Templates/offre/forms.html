@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/offre.css' %}">
+    <title>Créer une offre</title>
+</head>
+<body>
+    <main class="container">
+        <section class="card form-card">
+            <h1>Créer une offre</h1>
+            <p class="subtitle">Proposez vos conditions pour cette expédition.</p>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-actions">
+                    <button type="submit">Créer l'offre</button>
+                    <a class="button button-secondary" href="{% url 'Offre:listview' %}">Annuler</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

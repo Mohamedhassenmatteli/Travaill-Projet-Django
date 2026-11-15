@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/offre.css' %}">
+    <title>Détail de l'offre</title>
+</head>
+<body>
+    <main class="container">
+        <section class="card detail-card">
+            <div class="page-heading">
+                <div>
+                    <h1>Détail de l'offre</h1>
+                    <p class="subtitle">Offre #{{ detail.pk }}</p>
+                </div>
+                <span class="status">{{ detail.get_status_display }}</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><strong>Prix</strong>{{ detail.prix }} €</div>
+                <div class="detail-item"><strong>Délai</strong>{{ detail.delais_jour }} jour{{ detail.delais_jour|pluralize }}</div>
+                <div class="detail-item"><strong>Expédition</strong>{{ detail.expedition }}</div>
+                <div class="detail-item"><strong>Transporteur</strong>{{ detail.transporteur }}</div>
+                <div class="detail-item"><strong>Véhicule</strong>{{ detail.vehicule }}</div>
+            </div>
+            <a class="button button-secondary" href="{% url 'Offre:listview' %}">Retour aux offres</a>
+        </section>
+    </main>
+</body>
+</html>

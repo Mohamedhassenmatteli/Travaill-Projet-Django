@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/offre.css' %}">
+    <title>Supprimer l'offre</title>
+</head>
+<body>
+    <main class="container">
+        <section class="card danger-card">
+            <h1>Supprimer l'offre</h1>
+            <p>Êtes-vous sûr de vouloir supprimer l'offre #{{ object.pk }} ?</p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-actions">
+                    <button class="button-danger" type="submit">Supprimer</button>
+                    <a class="button button-secondary" href="{% url 'Offre:listview' %}">Annuler</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

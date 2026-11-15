@@ -180,6 +180,11 @@ button:hover {
     padding: 5px 10px;
 }
 
+.status-unavailable {
+    background: #fff3e0;
+    color: #e65100;
+}
+
 .actions {
     display: flex;
     flex-wrap: wrap;

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/offre.css' %}">
+    <title>Offres</title>
+</head>
+<body>
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <h1>Liste des offres</h1>
+                <p class="subtitle">Consultez et gérez les propositions de transport.</p>
+            </div>
+            <a class="button button-primary" href="{% url 'Offre:createview' %}">Nouvelle offre</a>
+        </div>
+        {% if list %}
+            <section class="offer-grid">
+                {% for obj in list %}
+                    <article class="card offer-card">
+                        <header>
+                            <div>
+                                <h2>Offre #{{ obj.pk }}</h2>
+                                <span class="offer-price">{{ obj.prix }} €</span>
+                            </div>
+                            <span class="status">{{ obj.get_status_display }}</span>
+                        </header>
+                        <dl class="offer-meta">
+                            <div>
+                                <dt>Expédition</dt>
+                                <dd>{{ obj.expedition }}</dd>
+                            </div>
+                            <div>
+                                <dt>Délai</dt>
+                                <dd>{{ obj.delais_jour }} jour{{ obj.delais_jour|pluralize }}</dd>
+                            </div>
+                            <div>
+                                <dt>Transporteur</dt>
+                                <dd>{{ obj.transporteur }}</dd>
+                            </div>
+                            <div>
+                                <dt>Véhicule</dt>
+                                <dd>{{ obj.vehicule }}</dd>
+                            </div>
+                        </dl>
+                        <div class="actions">
+                            <a class="button button-secondary" href="{% url 'Offre:detailview' obj.pk %}">Détails</a>
+                            <a class="button button-danger" href="{% url 'Offre:deleteview' obj.pk %}">Supprimer</a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </section>
+        {% else %}
+            <div class="card empty-state">Aucune offre n'est disponible.</div>
+        {% endif %}
+    </main>
+</body>
+</html>

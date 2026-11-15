@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/expedition.css' %}">
+    <title>{{ detail.immatriculation }} | TransLog</title>
+</head>
+<body>
+    <header class="topbar"><div class="topbar-inner"><a class="brand" href="{% url 'Vehicules:listview' %}">TransLog</a><nav><a href="{% url 'Vehicules:listview' %}">Véhicules</a></nav></div></header>
+    <main class="container">
+        <div class="page-heading">
+            <div><h1>Détail du véhicule</h1><p class="subtitle">Immatriculation {{ detail.immatriculation }}</p></div>
+            <a class="button button-secondary" href="{% url 'Vehicules:listview' %}">← Retour à la liste</a>
+        </div>
+        <section class="card detail-card">
+            <div class="detail-grid">
+                <div class="detail-item"><strong>Immatriculation</strong>{{ detail.immatriculation }}</div>
+                <div class="detail-item"><strong>Type</strong>{{ detail.get_type_vehicule_display }}</div>
+                <div class="detail-item"><strong>Capacité</strong>{{ detail.capacite_kg }} kg</div>
+                <div class="detail-item"><strong>Entreprise</strong>{{ detail.entreprise }}</div>
+                <div class="detail-item"><strong>Disponibilité</strong>{% if detail.disponible %}<span class="status">Disponible</span>{% else %}<span class="status status-unavailable">Indisponible</span>{% endif %}</div>
+                <div class="detail-item"><strong>Créé le</strong>{{ detail.created_at|date:"d/m/Y à H:i" }}</div>
+                <div class="detail-item"><strong>Modifié le</strong>{{ detail.updated_at|date:"d/m/Y à H:i" }}</div>
+            </div>
+            <div class="description"><strong>Description</strong><p>{{ detail.description }}</p></div>
+        </section>
+    </main>
+</body>
+</html>

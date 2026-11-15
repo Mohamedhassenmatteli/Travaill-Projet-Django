@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/expedition.css' %}">
+    <title>Véhicules | TransLog</title>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="{% url 'Vehicules:listview' %}">TransLog</a>
+            <nav><a href="{% url 'Vehicules:listview' %}">Véhicules</a></nav>
+        </div>
+    </header>
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <h1>Gestion des véhicules</h1>
+                <p class="subtitle">Gérez votre flotte et contrôlez les capacités disponibles.</p>
+            </div>
+            <a class="button button-primary" href="{% url 'Vehicules:add' %}">+ Nouveau véhicule</a>
+        </div>
+        {% if list %}
+            <div class="card table-wrap">
+                <table class="expedition-table">
+                    <thead>
+                        <tr>
+                            <th>Immatriculation</th><th>Type</th><th>Capacité</th><th>Disponibilité</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vehicule in list %}
+                            <tr>
+                                <td><span class="reference">{{ vehicule.immatriculation }}</span></td>
+                                <td>{{ vehicule.get_type_vehicule_display }}</td>
+                                <td>{{ vehicule.capacite_kg }} kg</td>
+                                <td>
+                                    {% if vehicule.disponible %}
+                                        <span class="status">Disponible</span>
+                                    {% else %}
+                                        <span class="status status-unavailable">Indisponible</span>
+                                    {% endif %}
+                                </td>
+                                <td class="actions">
+                                    <a class="button button-secondary" href="{% url 'Vehicules:detail' vehicule.pk %}">Détails</a>
+                                    <a class="button button-danger" href="{% url 'Vehicules:delete' vehicule.pk %}">Supprimer</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h2>Aucun véhicule</h2>
+                <p>Ajoutez votre premier véhicule pour commencer à gérer votre flotte.</p>
+                <a class="button button-primary" href="{% url 'Vehicules:add' %}">Ajouter un véhicule</a>
+            </div>
+        {% endif %}
+    </main>
+</body>
+</html>
