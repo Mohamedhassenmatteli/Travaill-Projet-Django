@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/expedition.css' %}">
+    <title>Mon profil</title>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="{% url 'Expidation:listview' %}">TransLog</a>
+            <nav><a href="{% url 'Expidation:listview' %}">Expéditions</a></nav>
+        </div>
+    </header>
+    <main class="container">
+        <div class="page-heading">
+            <div>
+                <h1>Mon profil</h1>
+                <p class="subtitle">Consultez et mettez à jour vos informations personnelles.</p>
+            </div>
+        </div>
+        <section class="card form-card">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-actions">
+                    <button class="button-primary" type="submit">Enregistrer</button>
+                    <a class="button button-danger" href="{% url 'profile_delete' %}">Supprimer mon profil</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

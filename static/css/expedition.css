@@ -284,6 +284,10 @@ button:hover {
     margin: 20px auto 28px;
 }
 
+.danger-card .form-actions {
+    justify-content: center;
+}
+
 @media (max-width: 680px) {
     .topbar-inner,
     .page-heading {

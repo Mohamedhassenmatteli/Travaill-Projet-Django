@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/expedition.css' %}">
+    <title>Supprimer mon profil</title>
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="{% url 'Expidation:listview' %}">TransLog</a>
+            <nav><a href="{% url 'Expidation:listview' %}">Expéditions</a></nav>
+        </div>
+    </header>
+    <main class="container">
+        <section class="card danger-card">
+            <h1>Supprimer mon profil</h1>
+            <p>Cette action est définitive. Voulez-vous vraiment supprimer votre profil ?</p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-actions">
+                    <button class="button-danger" type="submit">Oui, supprimer mon profil</button>
+                    <a class="button button-secondary" href="{% url 'profile' %}">Annuler</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

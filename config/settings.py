@@ -130,8 +130,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'EntrepriseApp.Utilisatuer'
 
-LOGIN_URL = "/login"
+LOGIN_URL = "login"
 
-LOGIN_REDIRECT_URL = "Expidation:listview"
+LOGIN_REDIRECT_URL = "profile"
 
 LOGOUT_REDIRECT_URL = "login"

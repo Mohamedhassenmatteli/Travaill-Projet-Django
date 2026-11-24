@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from django.contrib.auth.views import LoginView, LogoutView
-from EntrepriseApp.views import register
+from EntrepriseApp.views import ModifierProfile, SupprimerProfile, register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +26,7 @@ urlpatterns = [
     path("offre/",include("OffreApp.urls")),
     path('login/',LoginView.as_view(template_name='login.html'),name='login'),
     path('logout/',LogoutView.as_view(next_page='login'),name='logout'),
-    path('register/',register,name='register')
+    path('register/',register,name='register'),
+    path('profile/', ModifierProfile.as_view(), name='profile'),
+    path('profile/delete/', SupprimerProfile.as_view(), name='profile_delete'),
 ]
