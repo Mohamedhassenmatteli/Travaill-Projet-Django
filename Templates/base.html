@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <nav class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="{% url 'Expidation:listview' %}">TransLog</a>
+            <nav><a href="{% url 'Expidation:listview' %}">Expéditions</a></nav>
+            <ul class="user-menu">
+                {% if user.is_authenticated %}
+                    <li><span>Bonjour, {{ user.username }}</span></li>
+                    <li><a href="{% url 'logout' %}">Déconnexion</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Connexion</a></li>
+                {% endif %}
+            </ul>   
+        </div>
+    </nav>
+</body>
+</html>

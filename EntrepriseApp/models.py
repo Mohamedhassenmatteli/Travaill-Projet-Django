@@ -24,7 +24,6 @@ class Utilisatuer(AbstractUser):
     email = models.EmailField(unique=True,validators=[validate_email])
     telephone = models.CharField(max_length=15,blank=True,null=True)
     role = models.CharField(max_length=20,choices=[
-        ('admin','Admin'),
         ('c','Chargeur'),
         ('t','Transporteur')
     ],default='c')

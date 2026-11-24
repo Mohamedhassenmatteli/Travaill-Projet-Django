@@ -8,12 +8,24 @@
     <title>Expéditions | TransLog</title>
 </head>
 <body>
-    <header class="topbar">
+    <nav class="topbar">
         <div class="topbar-inner">
             <a class="brand" href="{% url 'Expidation:listview' %}">TransLog</a>
             <nav><a href="{% url 'Expidation:listview' %}">Expéditions</a></nav>
+            <ul class="user-menu">
+                {% if user.is_authenticated %}
+                    <li><span>Bonjour, {{ user.username }}</span></li>
+                    <form method="post" action="{% url 'logout' %}">    
+                        {% csrf_token %}
+                        <button type="submit">Déconnexion</button>
+                    </form>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Connexion</a></li>
+                    <li><a href="{% url 'register' %}">Inscription</a></li>
+                {% endif %}
+            </ul>   
         </div>
-    </header>
+    </nav>
     <main class="container">
         <div class="page-heading">
             <div>
@@ -27,7 +39,10 @@
                 <table class="expedition-table">
                     <thead>
                         <tr>
-                            <th>Référence</th><th>Itinéraire</th><th>Poids</th><th>Statut</th><th>Actions</th>
+                            <th>Référence</th><th>Itinéraire</th><th>Poids</th><th>Statut</th>
+                            {% if user.is_authenticated %}
+                                <th>Actions</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -37,10 +52,12 @@
                                 <td>{{ expedition.ville_depart }} → {{ expedition.ville_arrivee }}</td>
                                 <td>{{ expedition.poids_kg }} kg</td>
                                 <td><span class="status">{{ expedition.get_status_display }}</span></td>
-                                <td class="actions">
-                                    <a class="button button-secondary" href="{% url 'Expidation:update' expedition.pk %}">Modifier</a>
-                                    <a class="button button-danger" href="{% url 'Expidation:delete' expedition.pk %}">Supprimer</a>
-                                </td>
+                                {% if user.is_authenticated %}
+                                    <td class="actions">
+                                        <a class="button button-secondary" href="{% url 'Expidation:update' expedition.pk %}">Modifier</a>
+                                        <a class="button button-danger" href="{% url 'Expidation:deleteview' expedition.pk %}">Supprimer</a>
+                                    </td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     </tbody>
